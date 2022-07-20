@@ -1,0 +1,43 @@
+You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. 
+You can perform this operation at most k times.
+
+Return the length of the longest substring containing the same letter you can get after performing the above operations.
+
+Example 1:
+
+Input: s = "ABAB", k = 2
+Output: 4
+Explanation: Replace the two 'A's with two 'B's or vice versa.
+
+Solution 1:
+
+    public int characterReplacement(String s, int k) {
+       
+        int count[] = new int[26];
+        
+        int ans = 0, maxTillNow = Integer.MIN_VALUE, start = 0;
+        for(int end=0;end<s.length();end++){
+            maxTillNow = Math.max(maxTillNow, ++count[s.charAt(end)-'A']);
+            
+            if((end-start+1)-maxTillNow > k){
+                --count[s.charAt(start)-'A'];
+                start++;
+            }
+            ans = Math.max(ans, end-start+1);
+        }
+        
+        return ans;
+    }
+    
+Time Complexity: O(N)
+Space Complexity: O(26) = O(1)
+ 
+Intution: 
+ The problem says that we can make at most k changes to the string (any character can be replaced with any other character). 
+ So, let's say there were no constraints like the k. Given a string convert it to a string with all same characters with minimal changes. 
+ The answer to this is
+(length of the entire string) - (number of times of the maximum occurring character in the string)
+
+Given this, we can apply the at most k changes constraint and maintain a sliding window such that
+
+(length of substring - number of times of the maximum occurring character in the substring) <= k
